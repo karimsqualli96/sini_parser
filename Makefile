@@ -3,12 +3,19 @@ SHELL = /bin/sh
 CC := gcc
 CFLAGS := -Wall
 
+OBJSDIR := objs
+OUTDIR := out
 
-libsip.a : obj/parser.o
-	ar cr $@ obj/parser.o
+.PHONY : clean mkdirs
 
-obj/parser.o : src/parser.c src/parser.h
-	$(CC) $(CFLAGS) $< -c -o obj/parser.o
+libsip.a : $(OBJSDIR)/parser.o
+	ar cr -o $(OUTDIR)/$@ $(OBJSDIR)/parser.o 
+
+$(OBJSDIR)/parser.o : src/parser.c src/parser.h mkdirs
+	$(CC) $(CFLAGS) $< -c -o $(OBJSDIR)/parser.o
 
 clean :
-	rm -f obj/* libsip.a
+	rm -f $(OBJSDIR)/* libsip.a
+
+mkdirs :
+	mkdir -p $(OBJSDIR) $(OUTDIR) 

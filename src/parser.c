@@ -20,17 +20,24 @@ static char *readline(FILE *in, sid_error *error)
 	}
 
 	char *pos;
+	char *temp_alloc;
 	char read = 0;
 
 	while(fgets(str + size - MAX_SIZE, MAX_SIZE, in)) {
 		read = 1;
-		if(pos = strchr(str, '\n')) { 
+		if((pos = strchr(str, '\n')) != NULL) { 
 			*pos = '\0';
 			break;
 		}
 		
 		size = size + MAX_SIZE - 1;
-		str = realloc(str, sizeof *str * size); 
+		temp_alloc = realloc(str, sizeof *str * size); 
+
+		if(temp_alloc == NULL) {
+			*error = ERROR_MALLOC;
+			free(str);
+			return NULL;
+		}
 	}
 	
 	if(!read) {
@@ -93,7 +100,7 @@ void parse_file(FILE *file, void (*handler)(enum line_type type,
 		return;
 	}
 
-	while(line = readline(file, error)) {
+	while((line = readline(file, error)) != NULL) {
 		if(*error)
 			goto FREE;
 
@@ -121,7 +128,7 @@ void parse_file(FILE *file, void (*handler)(enum line_type type,
 			else *error = ERROR_PARSE;
 		}
 		// key_value pair
-		else if(pos = strchr(line, '=')) {
+		else if((pos = strchr(line, '=')) != NULL) {
 			*(pos - 1) = '\0';
 			key = line;
 			value = pos + 1;
