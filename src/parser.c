@@ -25,7 +25,7 @@ static char *readline(FILE *in, sid_error *error)
 
 	while(fgets(str + size - MAX_SIZE, MAX_SIZE, in)) {
 		read = 1;
-		if((pos = strchr(str, '\n')) != NULL) { 
+		if((pos = strchr(str + size - MAX_SIZE, '\n')) != NULL) { 
 			*pos = '\0';
 			break;
 		}
