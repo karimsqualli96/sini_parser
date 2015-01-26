@@ -10,7 +10,7 @@
 // read a the whole line, stop if encouter eof
 static char *readline(FILE *in, sip_error *error) 
 {
-	size_t size = DEFAUT_LINE_SIZE;
+	size_t size = DEFAULT_LINE_SIZE;
 	char *str;
 
 	if((str = malloc(sizeof *str * size)) == NULL) {
@@ -22,14 +22,14 @@ static char *readline(FILE *in, sip_error *error)
 	char *temp_alloc;
 	char lread = 0;
 
-	while(fgets(str + size - MAX_SIZE, MAX_SIZE, in)) {
+	while(fgets(str + size - DEFAULT_LINE_SIZE, DEFAULT_LINE_SIZE, in)) {
 		lread = 1;
-		if((pos = strchr(str + size - MAX_SIZE, '\n')) != NULL) { 
+		if((pos = strchr(str + size - DEFAULT_LINE_SIZE, '\n')) != NULL) { 
 			*pos = '\0';
 			break;
 		}
 		
-		size = size + MAX_SIZE - 1;
+		size = size + DEFAULT_LINE_SIZE - 1;
 		temp_alloc = realloc(str, sizeof *str * size); 
 
 		if(temp_alloc == NULL) {
@@ -79,7 +79,7 @@ static void line_strip(char *str)
 	*(estr+1) = '\0';
 }
 
-void parse_file(FILE *file, void (*handler)(enum line_type type, 
+void sip_parse_file(FILE *file, void (*handler)(enum line_type type, 
 	char *key_section, char *value), sip_error *error)
 {
 

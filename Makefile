@@ -10,7 +10,7 @@ OUTDIR := out
 
 libsip.a : $(OBJSDIR)/parser.o
 	ar cr -o $(OUTDIR)/$@ $(OBJSDIR)/parser.o 
-
+	cp -f src/parser.h $(OUTDIR)
 $(OBJSDIR)/parser.o : src/parser.c src/parser.h mkdirs
 	$(CC) $(CFLAGS) $< -c -o $(OBJSDIR)/parser.o
 

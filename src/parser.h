@@ -12,5 +12,5 @@ typedef unsigned int sip_error;
 #define DEFAULT_SECTION_SIZE	32
 #define DEFAULT_LINE_SIZE	64
 
-void parse_file(FILE *file, void (*handler)(enum line_type type,
+void sip_parse_file(FILE *file, void (*handler)(enum line_type type,
 	char *key_section, char *value), sip_error *error);
