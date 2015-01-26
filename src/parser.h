@@ -1,7 +1,7 @@
-typedef enum line_type {
+enum line_type {
 	e_section,
 	e_key_value,
-}Type;
+};
 
 
 typedef unsigned int sip_error;
