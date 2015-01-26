@@ -8,10 +8,9 @@
 
 
 // read a the whole line, stop if encouter eof
-static char *readline(FILE *in, sid_error *error) 
+static char *readline(FILE *in, sip_error *error) 
 {
-	#define MAX_SIZE	64	
-	size_t size = MAX_SIZE;
+	size_t size = DEFAUT_LINE_SIZE;
 	char *str;
 
 	if((str = malloc(sizeof *str * size)) == NULL) {
@@ -21,10 +20,10 @@ static char *readline(FILE *in, sid_error *error)
 
 	char *pos;
 	char *temp_alloc;
-	char read = 0;
+	char lread = 0;
 
 	while(fgets(str + size - MAX_SIZE, MAX_SIZE, in)) {
-		read = 1;
+		lread = 1;
 		if((pos = strchr(str + size - MAX_SIZE, '\n')) != NULL) { 
 			*pos = '\0';
 			break;
@@ -40,7 +39,7 @@ static char *readline(FILE *in, sid_error *error)
 		}
 	}
 	
-	if(!read) {
+	if(!lread) {
 		free(str);
 		return NULL;
 	}
@@ -81,7 +80,7 @@ static void line_strip(char *str)
 }
 
 void parse_file(FILE *file, void (*handler)(enum line_type type, 
-	char *key_section, char *value), sid_error *error)
+	char *key_section, char *value), sip_error *error)
 {
 
 	char *section;

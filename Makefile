@@ -15,7 +15,7 @@ $(OBJSDIR)/parser.o : src/parser.c src/parser.h mkdirs
 	$(CC) $(CFLAGS) $< -c -o $(OBJSDIR)/parser.o
 
 clean :
-	rm -f $(OBJSDIR)/* libsip.a
+	rm -rf $(OBJSDIR) $(OUTDIR)
 
 mkdirs :
 	mkdir -p $(OBJSDIR) $(OUTDIR) 
