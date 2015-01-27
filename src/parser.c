@@ -13,7 +13,7 @@ static char *readline(FILE *in, sip_error *error)
 	size_t size = DEFAULT_LINE_SIZE;
 	char *str;
 
-	if((str = malloc(sizeof *str * size)) == NULL) {
+	if((str = malloc(size)) == NULL) {
 		*error = ERROR_MALLOC; 
 		return NULL;
 	}
@@ -30,7 +30,7 @@ static char *readline(FILE *in, sip_error *error)
 		}
 		
 		size = size + DEFAULT_LINE_SIZE - 1;
-		temp_alloc = realloc(str, sizeof *str * size); 
+		temp_alloc = realloc(str,size); 
 
 		if(temp_alloc == NULL) {
 			*error = ERROR_MALLOC;
@@ -94,7 +94,7 @@ void sip_parse_file(FILE *file, void (*handler)(enum line_type type,
 	size_t ssize = DEFAULT_SECTION_SIZE;
 	size_t size;
 
-	if((section = malloc(sizeof *section * ssize)) == NULL) {
+	if((section = malloc(ssize)) == NULL) {
 		*error = ERROR_MALLOC;
 		return;
 	}
