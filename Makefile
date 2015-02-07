@@ -3,19 +3,33 @@ SHELL = /bin/sh
 CC := gcc
 CFLAGS := -Wall
 
+SRCSDIR := src
 OBJSDIR := objs
 OUTDIR := out
 
-.PHONY : clean mkdirs
+SRCS := $(wildcard $(SRCSDIR)/*.c) 
+OBJS := $(SRCS:$(SRCSDIR)/%.c=$(OBJSDIR)/%.o)
 
-libsip.a : $(OBJSDIR)/parser.o
-	ar cr -o $(OUTDIR)/$@ $(OBJSDIR)/parser.o 
+
+$(OUTDIR)/libsip.a : $(OBJS)
+	@mkdir -p $(@D)
+	ar cr -o $@ $^
 	cp -f src/parser.h $(OUTDIR)
-$(OBJSDIR)/parser.o : src/parser.c src/parser.h mkdirs
-	$(CC) $(CFLAGS) $< -c -o $(OBJSDIR)/parser.o
 
+$(OBJSDIR)/%.o : $(SRCSDIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) $< -c -o $@  
+	$(CC) -MM $< > $(patsubst %.c, %.d, $<) && \
+	sed -i \ '1s|^|$(@D)/|' $(patsubst %.c, %.d, $<) 
+# use sed to add path to object dependencies
+
+.PHONY : clean cleanall
 clean :
 	rm -rf $(OBJSDIR) $(OUTDIR)
 
-mkdirs :
-	mkdir -p $(OBJSDIR) $(OUTDIR) 
+cleanall : clean
+	-rm -rf $(wildcard $(SRCSDIR)/*.d)
+
+-include $(SRCS:%.c=%.d)
+
+
