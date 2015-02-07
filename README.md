@@ -36,7 +36,7 @@ void handler(enum line_type type, char *key_section, char *value)
 int main(int argc, char **argv)
 {
   // we use a variable error to check wheter an error happened while reading the ini file
-	sid_error error = 0;
+	sip_error error = 0;
 	sip_parse_file(stdin, handler, &error);
 
 	if(error) 
